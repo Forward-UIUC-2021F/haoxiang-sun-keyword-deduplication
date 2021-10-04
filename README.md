@@ -18,6 +18,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#design">Design</a></li>
+    <li><a href="#algorithm">Algorithm</a></li>
   </ol>
 </details>
 
@@ -71,6 +72,9 @@ Then utilizing multiple semantic-similarity databases and python NLP modules usi
 
 After the above two steps, we output a deduced list of keywords/phrases that each individual element should be semantically distinct from each other.
 
+
+<-- ALGORITHM -->
+## Algorithm 
 
 <!-- PROJECT LOGO -->
 <br />
