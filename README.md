@@ -1,86 +1,102 @@
-# keyword-deduplication
+This module is built to handle the task of grouping together/eliminating keywords/phrases that are very similar to each other (e.g. such as “database” and “databases”, or "database strategies" and "database algorithms").)
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#design">Design</a></li>
-    <li><a href="#algorithm">Algorithm</a></li>
-  </ol>
-</details>
+## Setup
 
+1. Install all the required libraries by running the following command
+```
+pip install -r requirements.txt 
+```
 
+2. Additionally, you may need to install anything related to PyTorch to load the learned Word2Vec model successfully.
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+3. All the tests and main functions can be found in the main.py file. Just directly run this file with Python.
 
-  This module is built to handle the task of grouping together/eliminating keywords/phrases that are very similar to each other (e.g. such as “database” and “databases”, or "database system" and "database algorithms").)
-  
-  The filtering criteria can be described in the following two ways: 
-  
-  First, we will do some simple grouping (based on the nlp technique stemming) where only keywords that are grouped should have the same roots but are expressed slightly differently (such as “algorithm” and “algorithms” or “random” and “randomization”).
-  
-  On the other hand, some phrases may have a more general / semantic notion of similarity (e.g. using embedding-based similarity to group keywords that are very similar). In this more general criteria, we may group together words such as "database", "database systems", and "database algorithms". Or "data mining" and "data mining techniques". Although these words may not have the same root / stem structure, they should still be grouped together since they refer to the same topic.
+The following is the breakdown of the repository of this module:
+```
+keyword_deduplication/
+    - requirements.txt
+    - word2vec/ 
+        -- __init__.py
+        -- run.py
+        -- word2vec.model
+    
+   - get_embedding.py
+   - main.py
+   - phrase_similarity.py
+   - similar_word.py
+   - setup.py
+```
 
-### Built With
+The text description here describing of all the important files / components in this repo. 
+* `word2vec/word2vec.model/`: Containing the trained model of word2vec used in this module
+* `get_embedding.py`: gets the embedding(vector) of each keyword/phrase in the trained model
+* `main.py`: runs the two deduplication functions with users inputs
+* `phrase_similarity.py`: implements the functions to achieve the two types of keyword/phrases deduplication(stemming-based, and embedding-based)
+* `similar_word.py`: helper functions to check if two keywords/phrases are regarded similar/duplicated.
 
-* [NLTK.stem](https://www.nltk.org/api/nltk.stem.html)
-* [NPMI Database](https://en.wikipedia.org/wiki/Pointwise_mutual_information)
-* [Sematch](https://pypi.org/project/sematch/)
-* [Sentence Transformers](https://pypi.org/project/sentence-transformers/)
+### Important 
+Go to [our shared google Drive space](https://drive.google.com/drive/folders/1rxPAdGTVcl-Xo6uuFovdKcCw5_FEaXIC?usp=sharing) and create a folder with the format `FirstnameLastName-Projectname` (e.g. `AshutoshUkey-KeywordTrie`). In here, make sure to include a zipped copy of any data files related to your module (including `.sql` dumps of necessary databases) as well as a backup zipped copy of your Github repo (i.e. all the files you upload to Github).
 
 
 
-<!-- GETTING STARTED -->
-## Getting Started
+## Functional Design (Usage)
 
-To be implemented after the module is finished.
+* Takes a list of keywords/phrases, and returns the deduplicated version of all these strings using stemming-based deduplication method
+```python
+    def dedup_by_stemming(keywords):
+        ... 
+        return [
+            'keyword1', 'keyword2',...
+        ]
+```
 
-### Prerequisites
+* Takes a list of keywords/phrases, and returns the deduplicated version of all these strings using embedding-based deduplication method
+```python
+    def dedup_by_embedding(keywords):
+        ...
+        return [
+            'keyword1', 'keyword2',...
+        ]
+```
 
-To be implemented after the module is finished.
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-To be implemented after the module is finished.
+## Demo video
+Make sure to include a video showing your module in action and how to use it in this section. Github Pages doesn't support this so I am unable to do this here. However, this can be done in your README.md files of your own repo. Follow instructions [here](https://stackoverflow.com/questions/4279611/how-to-embed-a-video-into-github-readme-md) of the accepted answer 
 
 
-<!-- DESIGN -->
-## Design
+## Algorithmic Design 
+For the stemming-based keywords/phrases deduplication, we just use the stemming function in the NLTK library. We sequentially compare every pair of input keywords, and if two keywords share the same stemming result, then we will ignore the second one, and keep the first one in the output list.
 
-This module is intended to be placed after the keyword-extraction module to enable future usages of any kind in the whole system.
+The embedding-based keywords/phrases deduplication is relatively harder than the previous method. It utilizes the trained model of word2vec. First, similarly, it compares every pair of keywords in the input. But in order to categorize two phrases as similar/duplicated, it finds all the common and distinct subwords of both phrases. Then it generates a new embedding for these two phrases and compare their cosine similarity. If the similarity is above the threshold of 0.8, then they would be categorized as duplicated. 
 
-The module first takes in a list of keywords/key-phrases that appear commonly in Computer Science research fields.
+![design architecture](https://github.com/Forward-UIUC-2021F/guidelines/blob/main/template_diagrams/sample-design.png)
 
-Using the NLTK Stemming libraries, we get rid of all the keywords that have the same stemmings, and group them into one.
 
-Then utilizing multiple semantic-similarity databases and python NLP modules using BERT&Co, we would group keywords/key-phrases that literally mean the same topic.
 
-After the above two steps, we output a deduced list of keywords/phrases that each individual element should be semantically distinct from each other.
 
+
+## Issues and Future Work
+
+In this section, please list all know issues, limitations, and possible areas for future improvement.
+
+* The stemming-based keywords deduplication could not be generalized to phrase deduplication. That is, this function only works for single words
+* The embedding-based keywords/phrases deduplication has a good performance, but not always very good. Sometimes it could regard two similar phrases as different.
+* In the future, we could consider exploring more into the embedding-based deduplication algorithm, to improve its performance to be just the right amount.
+
+## References: 
+Models and papers referred to in this module: 
+
+* Word2vec Model: https://github.com/ashuk203/keywords_forward
+* New Embedding Generation Paper: 
+Estimator Vectors: OOV Word Embeddings based on Subword and Context Clue
 
 <-- ALGORITHM -->
-## Algorithm 
+## Algorithm Design
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
   <a href="https://github.com/Forward-UIUC-2021F/keyword-deduplication">
-    <img src="./Flow.png" alt="Logo" width="640" height="540">
+    <img src="./embedding.jpg" alt="Logo" width="640" height="540">
   </a>
 
   <h3 align="center">Work Flow of the Keyword-Deduction Module</h3>
