@@ -68,9 +68,16 @@ For the stemming-based keywords/phrases deduplication, we just use the stemming 
 
 The embedding-based keywords/phrases deduplication is relatively harder than the previous method. It utilizes the trained model of word2vec. First, similarly, it compares every pair of keywords in the input. But in order to categorize two phrases as similar/duplicated, it finds all the common and distinct subwords of both phrases. Then it generates a new embedding for these two phrases and compare their cosine similarity. If the similarity is above the threshold of 0.8, then they would be categorized as duplicated. 
 
-![design architecture](https://github.com/Forward-UIUC-2021F/guidelines/blob/main/template_diagrams/sample-design.png)
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/Forward-UIUC-2021F/keyword-deduplication">
+    <img src="./embedding.jpg" alt="Logo" width="800" height="540">
+  </a>
 
+  <h3 align="center">Work Flow of the Keyword-Deduction Module</h3>
 
+</p>
 
 
 
@@ -88,17 +95,3 @@ Models and papers referred to in this module:
 * Word2vec Model: https://github.com/ashuk203/keywords_forward
 * New Embedding Generation Paper: 
 Estimator Vectors: OOV Word Embeddings based on Subword and Context Clue
-
-<-- ALGORITHM -->
-## Algorithm Design
-
-<!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/Forward-UIUC-2021F/keyword-deduplication">
-    <img src="./embedding.jpg" alt="Logo" width="640" height="540">
-  </a>
-
-  <h3 align="center">Work Flow of the Keyword-Deduction Module</h3>
-
-</p>
