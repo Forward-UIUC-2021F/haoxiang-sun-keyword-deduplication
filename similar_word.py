@@ -6,14 +6,24 @@ import traceback
 
 
 def similar_word(word1, word2, word2vec):
+
     common, subwords1, subwords2, factor1, factor2 = get_subwords(word1, word2, word2vec)
 
     embedding1 = np.array([1e-5] * 100)
     embedding2 = np.array([1e-5] * 100)
 
-    threshold = 0.81
+    threshold = 0.8
 
     quantity1, quantity2 = 1, 1
+    if len(common) != 0:
+        for c in common:
+            vector = get_embedding(c, word2vec)
+            embedding1 += 0.1 * vector
+            embedding2 += 0.1 * vector
+        embedding1 /= len(common)
+        embedding2 /= len(common)
+        quantity1 = 2
+        quantity2 = 2
     for i in range(len(subwords1)):
         sub = subwords1[i]
         fac = factor1[i]
@@ -53,8 +63,6 @@ def get_subwords(word1, word2, word2vec):
     ret2, fac2 = [], []
     for word in words1:
         if word in common:
-            ret1.append(word)
-            fac1.append(1.6)
             continue
         try:
             ret1.extend([pair[0] for pair in word2vec.most_similar(word)])
@@ -64,8 +72,6 @@ def get_subwords(word1, word2, word2vec):
             fac1.append(1)
     for word in words2:
         if word in common:
-            ret2.append(word)
-            fac2.append(1.6)
             continue
         try:
             ret2.extend([pair[0] for pair in word2vec.most_similar(word)])
@@ -75,7 +81,8 @@ def get_subwords(word1, word2, word2vec):
             fac2.append(1)
     return common, ret1, ret2, fac1, fac2
 
+
 # word2vec = gensim.models.Word2Vec.load('./word2vec/word2vec.model').wv
-# print(similar_word("supervised learning", "semi supervised learning", word2vec))
+# print(similar_word("data_mining", "data_visualization", word2vec))
 # print(similar_word("methods", "strategy", word2vec))
 # print(similar_word("techniques", "strategies", word2vec))

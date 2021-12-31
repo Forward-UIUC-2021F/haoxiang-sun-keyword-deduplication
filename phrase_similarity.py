@@ -13,15 +13,12 @@ def dedup_by_stemming(keywords_list):
     ps = PorterStemmer()
     ret = [keywords_list[0]]
     for i in range(1, len(keywords_list)):
-        try:
-            to_insert = True
-            for j in range(len(ret)):
-                if ps.stem(keywords_list[i]) == ps.stem(ret[j]):
-                    to_insert = False
-                    break
-            if to_insert:
-                ret.append(keywords_list[i])
-        except:
+        to_insert = True
+        for j in range(len(ret)):
+            if ps.stem(keywords_list[i]) == ps.stem(ret[j]):
+                to_insert = False
+                break
+        if to_insert:
             ret.append(keywords_list[i])
     return ret
 
@@ -56,3 +53,4 @@ def dedup_by_embedding(keywords_list):
             ret.append(i)
 
     return list(map(word2vec_unformat, ret))
+
