@@ -1,4 +1,3 @@
-@ -1,98 +1,99 @@
 This module is built to handle the task of grouping together/eliminating keywords/phrases that are very similar to each other (e.g. such as “database” and “databases”, or "database strategies" and "database algorithms").)
 
 ## Setup
@@ -69,7 +68,7 @@ Make sure to include a video showing your module in action and how to use it in 
 ## Algorithmic Design 
 For the stemming-based keywords/phrases deduplication, we just use the stemming function in the NLTK library. We sequentially compare every pair of input keywords, and if two keywords share the same stemming result, then we will ignore the second one, and keep the first one in the output list.
 
-The embedding-based keywords/phrases deduplication is relatively harder than the previous method. It utilizes the trained model of word2vec. First, similarly, it compares every pair of keywords in the input. But in order to categorize two phrases as similar/duplicated, it finds all the common and distinct subwords of both phrases. Then it generates a new embedding for these two phrases and compare their cosine similarity. If the similarity is above the threshold of 0.8, then they would be categorized as duplicated. 
+The embedding-based keywords/phrases deduplication is relatively harder than the previous method. It utilizes the trained model of word2vec. First, similarly, it compares every pair of keywords in the input. But in order to categorize two phrases as similar/duplicated, it finds all the common and distinct subwords of both phrases. Then it generates a new embedding for these two phrases and compare their cosine similarity. If the similarity is above the threshold of 0.75, then they would be categorized as duplicated. 
 
 <!-- PROJECT LOGO -->
 <br />
@@ -81,6 +80,11 @@ The embedding-based keywords/phrases deduplication is relatively harder than the
   <h3 align="center">Work Flow of the Keyword-Deduction Module</h3>
 
 </p>
+Example and Explanation:
+If the two phrases A = "Database Technique" and B = "Database Techniques" are in the input list, when examining this pair, their Common would be {"Database": 1.6}, and the SubWords1 = {"Technique": 1} and SubWords2 = {"Techniques": 1}. In order to make this model more comprehensive, we would use the trained model to extend the Subwords array by their similar words, each coming with a trained similarity.
+For example, Subwords1 may be changed to {"Technique": 1, "Method": 0.89, "Methodology": 0.84", "Techniques": 0.8", "Strategy": 0.75}, and Subwords2 may be changed to something very similar {"Techniques": 1, "Methods": 0.89, "Algorithms": 0.82", "Technique": 0.8", "Strategies": 0.7}.
+Next, for each word in Common and Subwords1, we extract its embedding(vector) in the trained model, multiply which by its factor shown above, and add them together to make Embedding A. The same goes for Embedding B.
+Finally, we just need to compare the Cosine Similarity between these two vectors, and if it's greater than 0.75, then we would categorize them as the pair of phrases that can be deduplicated.
 
 
 
