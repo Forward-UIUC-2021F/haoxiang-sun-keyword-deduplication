@@ -1,7 +1,10 @@
 from phrase_similarity import dedup_by_embedding, dedup_by_stemming
 
-
 print(dedup_by_stemming(['civilization', 'civil', 'computer']))
+
+print(dedup_by_stemming(["computational", "computer", "machine", "compute"]))
+
+print(dedup_by_stemming(["institutional", "institute", "thisworddoesnotexist"]))
 
 print(dedup_by_embedding(["database technique", "database techniques",
 
@@ -10,6 +13,8 @@ print(dedup_by_embedding(["database technique", "database techniques",
                           "machine learning",
 
                           "supervised learning",
+
+                          "semi supervised learning",
 
                           "un supervised learning",
 
