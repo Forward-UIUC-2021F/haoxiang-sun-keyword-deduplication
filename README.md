@@ -82,8 +82,11 @@ The embedding-based keywords/phrases deduplication is relatively harder than the
 </p>
 Example and Explanation:
 If the two phrases A = "Database Technique" and B = "Database Techniques" are in the input list, when examining this pair, their Common would be {"Database": 1.6}, and the SubWords1 = {"Technique": 1} and SubWords2 = {"Techniques": 1}. In order to make this model more comprehensive, we would use the trained model to extend the Subwords array by their similar words, each coming with a trained similarity.
+
 For example, Subwords1 may be changed to {"Technique": 1, "Method": 0.89, "Methodology": 0.84", "Techniques": 0.8", "Strategy": 0.75}, and Subwords2 may be changed to something very similar {"Techniques": 1, "Methods": 0.89, "Algorithms": 0.82", "Technique": 0.8", "Strategies": 0.7}.
+
 Next, for each word in Common and Subwords1, we extract its embedding(vector) in the trained model, multiply which by its factor shown above, and add them together to make Embedding A. The same goes for Embedding B.
+
 Finally, we just need to compare the Cosine Similarity between these two vectors, and if it's greater than 0.75, then we would categorize them as the pair of phrases that can be deduplicated.
 
 
